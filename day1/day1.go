@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"sort"
 	"strconv"
 	"unicode"
 )
@@ -36,7 +37,7 @@ func lineValue(line string) int {
 	return d
 }
 
-func (day Day1) SolvePart1 () string {
+func (day Day1) SolvePart1() string {
 	lines := helpers.GetLines(day.Input)
 	total := 0
 	for _, line := range lines {
@@ -44,6 +45,30 @@ func (day Day1) SolvePart1 () string {
 	}
 
 	return fmt.Sprintf("%d", total)
+}
+
+func stringToDigit(s string) string {
+	switch s {
+	case "one":
+		return "1"
+	case "two":
+		return "2"
+	case "three":
+		return "3"
+	case "four":
+		return "4"
+	case "five":
+		return "5"
+	case "six":
+		return "6"
+	case "seven":
+		return "7"
+	case "eight":
+		return "8"
+	case "nine":
+		return "9"
+	}
+	return s
 }
 
 func lineValue2(line string) int {
@@ -58,6 +83,7 @@ func lineValue2(line string) int {
 		"seven",
 		"eight",
 		"nine",
+		"[0-9]",
 	}
 	reMatches := make([]regexp.Regexp, 0)
 	for _, m := range matches {
@@ -65,77 +91,34 @@ func lineValue2(line string) int {
 	}
 
 	indexOfMatches := []struct {
-		from regexp.Regexp
-		to   int
-		locs [][]int
+		from        regexp.Regexp
+		actualMatch string
+		loc         []int
 	}{}
-	for i, re := range reMatches {
+	for _, re := range reMatches {
 		res := re.FindAllStringIndex(line, -1)
-		if res != nil {
+		resStrings := re.FindAllString(line, -1)
+		for i, loc := range res {
 			indexOfMatches = append(indexOfMatches, struct {
-				from regexp.Regexp
-				to   int
-				locs [][]int
+				from        regexp.Regexp
+				actualMatch string
+				loc         []int
 			}{
 				re,
-				i,
-				res,
+				resStrings[i],
+				loc,
 			})
 		}
 	}
 
-	var firstMatch, lastMatch *struct {
-		from regexp.Regexp
-		to   int
-		loc  int
-	}
-	for i, match := range indexOfMatches {
-		if i == 0 || match.locs[0][0] < firstMatch.loc {
-			firstMatch = &struct {
-				from regexp.Regexp
-				to   int
-				loc  int
-			}{
-				match.from,
-				match.to,
-				match.locs[0][0],
-			}
-		}
-		if i == 0 || match.locs[len(match.locs)-1][0] > lastMatch.loc {
-			lastMatch = &struct {
-				from regexp.Regexp
-				to   int
-				loc  int
-			}{
-				match.from,
-				match.to,
-				match.locs[len(match.locs)-1][0],
-			}
-		}
-	}
+	sort.Slice(indexOfMatches, func(i, j int) bool {
+		return indexOfMatches[i].loc[0] < indexOfMatches[j].loc[0]
+	})
 
-	var firstString, lastString = line, line
-	if firstMatch != nil {
-		firstString = firstMatch.from.ReplaceAllString(line, fmt.Sprintf("%d", firstMatch.to))
-	}
-	if lastMatch != nil {
-		lastString = lastMatch.from.ReplaceAllString(line, fmt.Sprintf("%d", lastMatch.to))
-	}
+	d1 := stringToDigit(indexOfMatches[0].actualMatch)
+	d2 := stringToDigit(indexOfMatches[len(indexOfMatches)-1].actualMatch)
 
-	var first, last rune
-	for _, c := range firstString {
-		if unicode.IsDigit(c) && first == 0{
-			first = c
-			break
-		}
-	}
-	for _, c := range lastString {
-		if unicode.IsDigit(c) {
-			last = c
-		}
-	}
-
-	d, err := strconv.Atoi(fmt.Sprintf("%c%c", first, last))
+	d, err := strconv.Atoi(fmt.Sprintf("%s%s", d1, d2))
 	if err != nil {
 		log.Fatal(err)
 	}

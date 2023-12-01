@@ -37,7 +37,7 @@ func main() {
 		log.Fatal(err)
 	}
 	s := string(bytes)
-	
+
 	d.SetInput(s)
 	fmt.Printf("=== RUNNING %s PART 1 ===\n", strings.ToUpper(day))
 	res := d.SolvePart1()

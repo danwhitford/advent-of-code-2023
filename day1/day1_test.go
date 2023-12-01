@@ -48,10 +48,10 @@ func TestLineValue2(t *testing.T) {
 		{"xtwone3four", 24},
 		{"4nineeightseven2", 42},
 		{"zoneight234", 14},
-		{"zoneight234", 14},
 		{"9zml", 99},
 		{"foofivebar", 55},
 		{"eightwo", 82},
+		{"19", 19},
 	}
 
 	for _, tst := range table {
