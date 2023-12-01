@@ -11,11 +11,11 @@ import (
 )
 
 type Day1 struct {
-	Input string
+	lines []string
 }
 
 func (day *Day1) SetInput(input string) {
-	day.Input = input
+	day.lines = helpers.GetLines(input)
 }
 
 func lineValue(line string) int {
@@ -38,9 +38,8 @@ func lineValue(line string) int {
 }
 
 func (day Day1) SolvePart1() string {
-	lines := helpers.GetLines(day.Input)
 	total := 0
-	for _, line := range lines {
+	for _, line := range day.lines {
 		total += lineValue(line)
 	}
 
@@ -126,9 +125,8 @@ func lineValue2(line string) int {
 }
 
 func (day Day1) SolvePart2() string {
-	lines := helpers.GetLines(day.Input)
 	total := 0
-	for _, line := range lines {
+	for _, line := range day.lines {
 		total += lineValue2(line)
 	}
 	return fmt.Sprintf("%d", total)
