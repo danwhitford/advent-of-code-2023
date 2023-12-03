@@ -91,22 +91,22 @@ func (g grid) inBounds(xy point) bool {
 
 func (g grid) getNeighbours(num number) []byte {
 	nn := make([]byte, 0)
-	for x := num.start - 1; x <= num.end + 1; x++ {
+	for x := num.start - 1; x <= num.end+1; x++ {
 		xy := point{x, num.row - 1}
 		if g.inBounds(xy) {
 			n := g.getXY(point{x, num.row - 1})
 			nn = append(nn, n)
 		}
 	}
-	if g.inBounds(point{num.start-1, num.row}) {
-		n := g.getXY(point{num.start-1, num.row})
+	if g.inBounds(point{num.start - 1, num.row}) {
+		n := g.getXY(point{num.start - 1, num.row})
 		nn = append(nn, n)
 	}
-	if g.inBounds(point{num.end+1, num.row}) {
-		n := g.getXY(point{num.end+1, num.row})
+	if g.inBounds(point{num.end + 1, num.row}) {
+		n := g.getXY(point{num.end + 1, num.row})
 		nn = append(nn, n)
 	}
-	for x := num.start - 1; x <= num.end + 1; x++ {
+	for x := num.start - 1; x <= num.end+1; x++ {
 		xy := point{x, num.row + 1}
 		if g.inBounds(xy) {
 			n := g.getXY(point{x, num.row + 1})
@@ -116,12 +116,36 @@ func (g grid) getNeighbours(num number) []byte {
 	return nn
 }
 
-func (g grid) getGears() []point {
+func (g grid) getAdjacentGears(num number) []point {
 	gears := make([]point, 0)
-	for i, cell := range g.cells {
-		if cell == '*' {
-			xy := g.iToXY(i)
-			gears = append(gears, xy)
+	for x := num.start - 1; x <= num.end+1; x++ {
+		xy := point{x, num.row - 1}
+		if g.inBounds(xy) {
+			n := g.getXY(point{x, num.row - 1})
+			if n == '*' {
+				gears = append(gears, xy)
+			}
+		}
+	}
+	if g.inBounds(point{num.start - 1, num.row}) {
+		n := g.getXY(point{num.start - 1, num.row})
+		if n == '*' {
+			gears = append(gears, point{num.start - 1, num.row})
+		}
+	}
+	if g.inBounds(point{num.end + 1, num.row}) {
+		n := g.getXY(point{num.end + 1, num.row})
+		if n == '*' {
+			gears = append(gears, point{num.end + 1, num.row})
+		}
+	}
+	for x := num.start - 1; x <= num.end+1; x++ {
+		xy := point{x, num.row + 1}
+		if g.inBounds(xy) {
+			n := g.getXY(point{x, num.row + 1})
+			if n == '*' {
+				gears = append(gears, xy)
+			}
 		}
 	}
 	return gears
@@ -168,7 +192,7 @@ func containsSymbol(syms []byte) bool {
 	return !helpers.Every[byte](syms, func(t byte) bool {
 		return (t >= '0' && t <= '9') || t == '.'
 	})
-} 
+}
 
 func (day *Day3) SetInput(s string) {
 	lines := helpers.GetLines(s)
@@ -183,7 +207,7 @@ func (day *Day3) SetInput(s string) {
 	day.grid = g
 }
 
-func (day Day3) SolvePart1() string {	
+func (day Day3) SolvePart1() string {
 	total := 0
 
 	for _, n := range day.grid.getNumbers() {
@@ -195,6 +219,19 @@ func (day Day3) SolvePart1() string {
 }
 
 func (day Day3) SolvePart2() string {
-	fmt.Println(day.grid.getGears())
-	return ""
+	gearAdjacencyMap := make(map[point][]number)
+	for _, n := range day.grid.getNumbers() {
+		adjacentGears := day.grid.getAdjacentGears(n)
+		for _, gear := range adjacentGears {
+			gearAdjacencyMap[gear] = append(gearAdjacencyMap[gear], n)
+		}
+	}
+
+	total := 0
+	for _, adjacentNumbers := range gearAdjacencyMap {
+		if len(adjacentNumbers) == 2 {
+			total += (adjacentNumbers[0].val * adjacentNumbers[1].val)
+		}
+	}
+	return fmt.Sprint(total)
 }
