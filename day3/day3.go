@@ -7,8 +7,6 @@ import (
 	"strings"
 )
 
-// import "aoc2023/helpers"
-
 type Day3 struct {
 	grid grid
 }
@@ -188,10 +186,12 @@ func parseRow(row []byte) []number {
 	return nums
 }
 
+func isSymbol(t byte) bool {
+	return !(t >= '0' && t <= '9') && t != '.'
+}
+
 func containsSymbol(syms []byte) bool {
-	return !helpers.Every[byte](syms, func(t byte) bool {
-		return (t >= '0' && t <= '9') || t == '.'
-	})
+	return helpers.Some[byte](syms, isSymbol)
 }
 
 func (day *Day3) SetInput(s string) {

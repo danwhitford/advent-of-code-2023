@@ -95,7 +95,7 @@ func TestXYToI(t *testing.T) {
 	for _, tst := range table {
 		got := g.xYToI(tst.in)
 		if diff := cmp.Diff(tst.want, got); diff != "" {
-			t.Errorf("mismatch (-want +got):\n%s", diff)
+			t.Errorf("mismatch for (-want +got):\n%s", diff)
 		}
 	}
 }
@@ -115,7 +115,7 @@ func TestContainsSymbol(t *testing.T) {
 	for _, tst := range table {
 		got := containsSymbol(tst.in)
 		if diff := cmp.Diff(tst.want, got); diff != "" {
-			t.Errorf("mismatch (-want +got):\n%s", diff)
+			t.Errorf("mismatch '%v' (-want +got):\n%s", string(tst.in), diff)
 		}
 	}
 }
