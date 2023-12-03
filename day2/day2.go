@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-
 )
 
 type Day2 struct {
@@ -210,10 +209,10 @@ func (day Day2) SolvePart1() string {
 }
 
 func (g game) getPowers() int {
-	maxes := map[string]int {
-		"red": 0,
+	maxes := map[string]int{
+		"red":   0,
 		"green": 0,
-		"blue": 0,
+		"blue":  0,
 	}
 	for _, s := range g.sets {
 		for _, c := range s.cubes {

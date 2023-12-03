@@ -56,8 +56,8 @@ func TestIToXY(t *testing.T) {
 	cells := make([]byte, 100)
 	g := grid{10, 10, cells}
 
-	table := []struct{
-		in int
+	table := []struct {
+		in   int
 		want point
 	}{
 		{0, point{0, 0}},
@@ -80,8 +80,8 @@ func TestXYToI(t *testing.T) {
 	cells := make([]byte, 100)
 	g := grid{10, 10, cells}
 
-	table := []struct{
-		in point
+	table := []struct {
+		in   point
 		want int
 	}{
 		{point{0, 0}, 0},
@@ -101,15 +101,15 @@ func TestXYToI(t *testing.T) {
 }
 
 func TestContainsSymbol(t *testing.T) {
-	table := []struct{
-		in []byte
+	table := []struct {
+		in   []byte
 		want bool
 	}{
-		{[]byte{'.','.','.','.',}, false},
-		{[]byte{'*','.','.','.',}, true},
-		{[]byte{'*','/','.','.',}, true},
-		{[]byte{'.','2','.','.',}, false},
-		{[]byte{'*','2','.','.',}, true},
+		{[]byte{'.', '.', '.', '.'}, false},
+		{[]byte{'*', '.', '.', '.'}, true},
+		{[]byte{'*', '/', '.', '.'}, true},
+		{[]byte{'.', '2', '.', '.'}, false},
+		{[]byte{'*', '2', '.', '.'}, true},
 	}
 
 	for _, tst := range table {

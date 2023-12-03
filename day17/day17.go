@@ -1,6 +1,6 @@
 package day17
 
-type Day17 struct {}
+type Day17 struct{}
 
 func (day *Day17) SetInput(s string) {}
 

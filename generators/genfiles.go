@@ -1,9 +1,9 @@
 package main
 
 import (
-    "os"
-    "strconv"
-    "text/template"
+	"os"
+	"strconv"
+	"text/template"
 )
 
 // Template for generating the files
@@ -23,22 +23,22 @@ func (day Day{{.Number}}) SolvePart2() string {
 `
 
 func main() {
-    tmpl, err := template.New("file").Parse(fileTemplate)
-    if err != nil {
-        panic(err)
-    }
+	tmpl, err := template.New("file").Parse(fileTemplate)
+	if err != nil {
+		panic(err)
+	}
 
-    for i := 3; i <= 25; i++ {
-        fileName := "day" + strconv.Itoa(i) + "/day" + strconv.Itoa(i) + ".go"
-        file, err := os.Create(fileName)
-        if err != nil {
-            panic(err)
-        }
-        defer file.Close()
+	for i := 3; i <= 25; i++ {
+		fileName := "day" + strconv.Itoa(i) + "/day" + strconv.Itoa(i) + ".go"
+		file, err := os.Create(fileName)
+		if err != nil {
+			panic(err)
+		}
+		defer file.Close()
 
-        err = tmpl.Execute(file, struct{ Number int }{Number: i})
-        if err != nil {
-            panic(err)
-        }
-    }
+		err = tmpl.Execute(file, struct{ Number int }{Number: i})
+		if err != nil {
+			panic(err)
+		}
+	}
 }
