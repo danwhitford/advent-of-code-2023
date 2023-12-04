@@ -23,7 +23,7 @@ func (day Day{{.Number}}) SolvePart2() string {
 }
 `
 
-const testTemplate = `package day2
+const testTemplate = `package day{{.Number}}
 
 import (
 	"testing"
