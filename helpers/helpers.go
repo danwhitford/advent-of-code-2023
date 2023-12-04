@@ -62,6 +62,9 @@ func (t *Tokeniser) Tokenise() []Token {
 		} else if p == ';' {
 			retVal = append(retVal, Token{"semicolon", ";"})
 			t.readAssert(';')
+		} else if p == '|' {
+			retVal = append(retVal, Token{"pipe", "|"})
+			t.readAssert('|')
 		} else if p == ' ' {
 			t.readAssert(' ')
 		} else {
@@ -69,7 +72,7 @@ func (t *Tokeniser) Tokenise() []Token {
 			if _, err := strconv.Atoi(lexeme); err == nil {
 				retVal = append(retVal, Token{"int", lexeme})
 			} else {
-				retVal = append(retVal, Token{"string", lexeme})
+				retVal = append(retVal, Token{"keyword", lexeme})
 			}
 		}
 	}

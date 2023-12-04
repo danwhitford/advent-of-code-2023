@@ -53,7 +53,7 @@ func (p *parser) parseSet() set {
 		case "int":
 			q, _ := strconv.Atoi(t.Val)
 			c.quantity = q
-		case "string":
+		case "keyword":
 			c.colour = t.Val
 		case "comma":
 			cc = append(cc, c)
