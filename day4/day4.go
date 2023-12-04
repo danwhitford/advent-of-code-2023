@@ -4,7 +4,6 @@ import (
 	"aoc2023/helpers"
 	"fmt"
 	"strconv"
-	"strings"
 )
 
 type Day4 struct {
@@ -12,37 +11,54 @@ type Day4 struct {
 }
 
 type card struct {
-	id int
+	id            int
 	intersections int
-	quantityHeld int
+	quantityHeld  int
 }
 
 type set map[int]interface{}
 
 func parseLine(s string) card {
+	tker := helpers.NewTokeniser(s)
+	tokens := helpers.NewStream[helpers.Token](tker.Tokenise())
+
 	c := card{
 		0,
 		0,
 		1,
 	}
-	numbers := strings.Split(s, ":")[1]
-	splitNumbers := strings.Split(numbers, "|")
 	winners := make(set)
 	mine := make(set)
-	for _, n := range strings.Fields(splitNumbers[0]) {
-		d, err := strconv.Atoi(n)
-		if err != nil {
-			panic(err)
+
+	for tokens.HasNext() {
+		t := tokens.Next()
+		if t.T == "colon" {
+			break
 		}
-		winners[d] = struct{}{}
 	}
-	for _, n := range strings.Fields(splitNumbers[1]) {
-		d, err := strconv.Atoi(n)
+
+	for tokens.HasNext() {
+		t := tokens.Next()
+		if t.T == "pipe" {
+			break
+		} else {
+			d, err := strconv.Atoi(t.Val)
+			if err != nil {
+				panic(err)
+			}
+			winners[d] = struct{}{}
+		}
+	}
+
+	for tokens.HasNext() {
+		t := tokens.Next()
+		d, err := strconv.Atoi(t.Val)
 		if err != nil {
 			panic(err)
 		}
 		mine[d] = struct{}{}
 	}
+
 	c.intersections = getIntersections(winners, mine)
 	return c
 }
@@ -61,7 +77,7 @@ func (day *Day4) SetInput(s string) {
 	lines := helpers.GetLines(s)
 	for i, line := range lines {
 		card := parseLine(line)
-		card.id = i+1
+		card.id = i + 1
 		day.cards = append(day.cards, card)
 	}
 }
@@ -81,11 +97,11 @@ func (day Day4) SolvePart1() string {
 func (day Day4) SolvePart2() string {
 	for i := 0; i < len(day.cards); i++ {
 		numberIntersects := day.cards[i].intersections
-		for j := i+1; j <= i+numberIntersects; j++ {
+		for j := i + 1; j <= i+numberIntersects; j++ {
 			day.cards[j].quantityHeld += day.cards[i].quantityHeld
 		}
 	}
-	
+
 	total := 0
 	for _, card := range day.cards {
 		total += card.quantityHeld

@@ -107,3 +107,22 @@ func (t *Tokeniser) readAssert(expected byte) byte {
 	t.location++
 	return l
 }
+
+type Stream[T any] struct {
+	data []T
+	location int
+}
+
+func NewStream[T any](t []T) Stream[T] {
+	return Stream[T]{t, 0}
+}
+
+func (st Stream[T]) HasNext() bool {
+	return st.location < len(st.data)
+}
+
+func (st *Stream[T]) Next() T {
+	t := st.data[st.location]
+	st.location++
+	return t
+}
