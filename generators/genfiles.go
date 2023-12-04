@@ -60,7 +60,7 @@ func TestSolvePart{{.Number}}(t *testing.T) {
 }
 `
 
-func writeTemplateToFile(filename string, tmpl *template.Template) {
+func writeTemplateToFile(filename string, i int, tmpl *template.Template) {
 	_, err := os.Stat(filename)
 	if err == nil {
 		fmt.Printf("Skipping '%s' cos it exists\n", filename)
@@ -94,7 +94,7 @@ func main() {
 	for i := 3; i <= 25; i++ {
 		fileName := "day" + strconv.Itoa(i) + "/day" + strconv.Itoa(i) + ".go"
 		testFileName := "day" + strconv.Itoa(i) + "/day" + strconv.Itoa(i) + "_test.go"
-		writeTemplateToFile(fileName, tmpl)
-		writeTemplateToFile(testFileName, testTmpl)
+		writeTemplateToFile(fileName, i, tmpl)
+		writeTemplateToFile(testFileName, i, testTmpl)
 	}
 }
