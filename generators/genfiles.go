@@ -52,7 +52,7 @@ func TestSolvePart{{.Number}}(t *testing.T) {
 
 	d{{.Number}} := &Day{{.Number}}{}
 	d{{.Number}}.SetInput(exampleIn)
-	got := d{{.Number}}.SolvePart{{.Number}}()
+	got := d{{.Number}}.SolvePart2()
 
 	if diff := cmp.Diff(want, got); diff != "" {
 		t.Errorf("TestError() mismatch (-want +got):\n%s", diff)
