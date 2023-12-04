@@ -9,7 +9,7 @@ import (
 func TestSolvePart1(t *testing.T) {
 	exampleIn := ""
 
-	want := "-"
+	want := ""
 
 	d14 := &Day14{}
 	d14.SetInput(exampleIn)

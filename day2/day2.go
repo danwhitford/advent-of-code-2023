@@ -4,7 +4,6 @@ import (
 	"aoc2023/helpers"
 	"fmt"
 	"strconv"
-	"strings"
 )
 
 type Day2 struct {
@@ -25,74 +24,8 @@ type game struct {
 	sets []set
 }
 
-type tokeniser struct {
-	input    string
-	location int
-}
-
-type token struct {
-	t   string
-	val string
-}
-
-func (t *tokeniser) tokenise() []token {
-	retVal := make([]token, 0)
-	for t.location < len(t.input) {
-		p := t.peek()
-		if p == ':' {
-			retVal = append(retVal, token{"colon", ":"})
-			t.readAssert(':')
-		} else if p == ',' {
-			retVal = append(retVal, token{"comma", ","})
-			t.readAssert(',')
-		} else if p == ';' {
-			retVal = append(retVal, token{"semicolon", ";"})
-			t.readAssert(';')
-		} else if p == ' ' {
-			t.readAssert(' ')
-		} else {
-			lexeme := t.readLexeme()
-			if _, err := strconv.Atoi(lexeme); err == nil {
-				retVal = append(retVal, token{"int", lexeme})
-			} else {
-				retVal = append(retVal, token{"string", lexeme})
-			}
-		}
-	}
-	return retVal
-}
-
-func (t *tokeniser) readLexeme() string {
-	var s strings.Builder
-	for t.location < len(t.input) {
-		l := t.peek()
-		if l == ':' || l == ',' || l == ';' {
-			return s.String()
-		}
-		t.readAssert(l)
-		if l == ' ' || l == '\n' {
-			return s.String()
-		}
-		s.WriteByte(l)
-	}
-	return s.String()
-}
-
-func (t *tokeniser) peek() byte {
-	return t.input[t.location]
-}
-
-func (t *tokeniser) readAssert(expected byte) byte {
-	l := t.input[t.location]
-	if l != expected {
-		panic(fmt.Errorf("wanted %c but got %c", expected, l))
-	}
-	t.location++
-	return l
-}
-
 type parser struct {
-	tokens   []token
+	tokens   []helpers.Token
 	location int
 }
 
@@ -100,7 +33,7 @@ func (p *parser) parseGame() game {
 	g := game{}
 	p.readAssertLexeme("Game")
 	gameIndexToken := p.readAssertType("int")
-	gameIndex, _ := strconv.Atoi(gameIndexToken.val)
+	gameIndex, _ := strconv.Atoi(gameIndexToken.Val)
 	p.readAssertType("colon")
 
 	for p.location < len(p.tokens) {
@@ -116,12 +49,12 @@ func (p *parser) parseSet() set {
 	c := cube{}
 	for p.location < len(p.tokens) {
 		t := p.read()
-		switch t.t {
+		switch t.T {
 		case "int":
-			q, _ := strconv.Atoi(t.val)
+			q, _ := strconv.Atoi(t.Val)
 			c.quantity = q
 		case "string":
-			c.colour = t.val
+			c.colour = t.Val
 		case "comma":
 			cc = append(cc, c)
 			continue
@@ -134,33 +67,33 @@ func (p *parser) parseSet() set {
 	return set{cc}
 }
 
-func (p *parser) read() token {
+func (p *parser) read() helpers.Token {
 	t := p.tokens[p.location]
 	p.location++
 	return t
 }
 
-func (p *parser) readAssertType(expected string) token {
+func (p *parser) readAssertType(expected string) helpers.Token {
 	t := p.tokens[p.location]
-	if t.t != expected {
-		panic(fmt.Errorf("expected %s but got %s", expected, t.t))
+	if t.T != expected {
+		panic(fmt.Errorf("expected %s but got %s", expected, t.T))
 	}
 	p.location++
 	return t
 }
 
-func (p *parser) readAssertLexeme(expected string) token {
+func (p *parser) readAssertLexeme(expected string) helpers.Token {
 	t := p.tokens[p.location]
-	if t.val != expected {
-		panic(fmt.Errorf("expected %s but got %s", expected, t.val))
+	if t.Val != expected {
+		panic(fmt.Errorf("expected %s but got %s", expected, t.Val))
 	}
 	p.location++
 	return t
 }
 
 func parseLine(s string) game {
-	tser := tokeniser{s, 0}
-	tokens := tser.tokenise()
+	tser := helpers.NewTokeniser(s)
+	tokens := tser.Tokenise()
 	pser := parser{tokens, 0}
 	g := pser.parseGame()
 	return g

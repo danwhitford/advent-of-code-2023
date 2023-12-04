@@ -34,7 +34,7 @@ import (
 func TestSolvePart1(t *testing.T) {
 	exampleIn := ""
 
-	want := "-"
+	want := ""
 
 	d{{.Number}} := &Day{{.Number}}{}
 	d{{.Number}}.SetInput(exampleIn)
