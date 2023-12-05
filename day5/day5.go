@@ -115,7 +115,7 @@ func mapGroup(i int, mapGroup []mapper) int {
 
 func mapGroupReverse(i int, mapGroup []mapper) int {
 	for _, mapper := range mapGroup {
-		if i >= mapper.destination && i < mapper.destination + mapper.length {
+		if i >= mapper.destination && i < mapper.destination+mapper.length {
 			dest := mapper.source + (i - mapper.destination)
 			return dest
 		}
@@ -153,7 +153,7 @@ func (day Day5) SolvePart2() string {
 	for {
 		seed := day.mapLocationToSeed(location)
 		for _, rng := range day.seedRanges {
-			if seed >= rng.source && seed < rng.source + rng.length {
+			if seed >= rng.source && seed < rng.source+rng.length {
 				return fmt.Sprint(location)
 			}
 		}

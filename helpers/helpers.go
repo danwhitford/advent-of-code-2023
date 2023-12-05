@@ -109,7 +109,7 @@ func (t *Tokeniser) readAssert(expected byte) byte {
 }
 
 type Stream[T any] struct {
-	data []T
+	data     []T
 	location int
 }
 

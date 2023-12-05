@@ -5,7 +5,8 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 )
- const 	exampleIn = `seeds: 79 14 55 13
+
+const exampleIn = `seeds: 79 14 55 13
 
  seed-to-soil map:
  50 98 2
@@ -39,8 +40,7 @@ import (
  60 56 37
  56 93 4`
 
- func TestSolvePart1(t *testing.T) {
-
+func TestSolvePart1(t *testing.T) {
 
 	want := "35"
 
@@ -67,7 +67,7 @@ func TestSolvePart5(t *testing.T) {
 
 func TestMapLocationToSeed(t *testing.T) {
 	table := []struct {
-		in int
+		in   int
 		want int
 	}{
 		{82, 79},
@@ -79,10 +79,10 @@ func TestMapLocationToSeed(t *testing.T) {
 	d5 := &Day5{}
 	d5.SetInput(exampleIn)
 
-	for _, tst := range table {	
+	for _, tst := range table {
 		got := d5.mapLocationToSeed(tst.in)
 		if diff := cmp.Diff(tst.want, got); diff != "" {
-			t.Errorf("TestError() mismatch (-want +got):\n%s", diff)	
+			t.Errorf("TestError() mismatch (-want +got):\n%s", diff)
 		}
 	}
 }
