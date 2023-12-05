@@ -126,3 +126,20 @@ func (st *Stream[T]) Next() T {
 	st.location++
 	return t
 }
+
+func (st *Stream[T]) NextAssert(fn func(t T) bool) T {
+	t := st.data[st.location]
+	if !fn(t) {
+		panic("failed assert")
+	}
+	st.location++
+	return t
+}
+
+func (st Stream[T]) Peek() T {
+	return st.data[st.location]
+}
+
+func PrintStruct(t any) {
+	fmt.Printf("%+v\n", t)
+}

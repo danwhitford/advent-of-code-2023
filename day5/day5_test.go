@@ -5,11 +5,44 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 )
+ const 	exampleIn = `seeds: 79 14 55 13
 
-func TestSolvePart1(t *testing.T) {
-	exampleIn := ""
+ seed-to-soil map:
+ 50 98 2
+ 52 50 48
+ 
+ soil-to-fertilizer map:
+ 0 15 37
+ 37 52 2
+ 39 0 15
+ 
+ fertilizer-to-water map:
+ 49 53 8
+ 0 11 42
+ 42 0 7
+ 57 7 4
+ 
+ water-to-light map:
+ 88 18 7
+ 18 25 70
+ 
+ light-to-temperature map:
+ 45 77 23
+ 81 45 19
+ 68 64 13
+ 
+ temperature-to-humidity map:
+ 0 69 1
+ 1 0 69
+ 
+ humidity-to-location map:
+ 60 56 37
+ 56 93 4`
 
-	want := ""
+ func TestSolvePart1(t *testing.T) {
+
+
+	want := "35"
 
 	d5 := &Day5{}
 	d5.SetInput(exampleIn)
@@ -21,9 +54,7 @@ func TestSolvePart1(t *testing.T) {
 }
 
 func TestSolvePart5(t *testing.T) {
-	exampleIn := ""
-
-	want := ""
+	want := "46"
 
 	d5 := &Day5{}
 	d5.SetInput(exampleIn)
@@ -31,5 +62,27 @@ func TestSolvePart5(t *testing.T) {
 
 	if diff := cmp.Diff(want, got); diff != "" {
 		t.Errorf("TestError() mismatch (-want +got):\n%s", diff)
+	}
+}
+
+func TestMapLocationToSeed(t *testing.T) {
+	table := []struct {
+		in int
+		want int
+	}{
+		{82, 79},
+		{43, 14},
+		{86, 55},
+		{35, 13},
+	}
+
+	d5 := &Day5{}
+	d5.SetInput(exampleIn)
+
+	for _, tst := range table {	
+		got := d5.mapLocationToSeed(tst.in)
+		if diff := cmp.Diff(tst.want, got); diff != "" {
+			t.Errorf("TestError() mismatch (-want +got):\n%s", diff)	
+		}
 	}
 }
